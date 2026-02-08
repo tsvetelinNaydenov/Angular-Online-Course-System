@@ -1,0 +1,27 @@
+@import "src/app/shared/styles/variables/colors";
+@import "src/app/shared/styles/variables/fonts";
+
+@mixin base-button {
+    display: inline-flex;
+    padding: 13px 36px;
+    background: $color-btn;
+    border-radius: 4px;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: $font-primary;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+
+     &:hover {
+        background: $background-color-btn;
+    }
+    &:active {
+        background: darken($color-btn, 15%); //using SASS function to darken button while pressing the button
+    }
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 5px $color-focus;
+    }
+}

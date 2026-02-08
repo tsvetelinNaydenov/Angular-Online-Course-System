@@ -1,0 +1,10 @@
+<section class="courses-list" *ngFor="let course of courses">
+    <!-- send course, isEditable to course-card component and handle clickOnShow-->
+    <app-course-card [course]="course" [isEditable]="editable" (clickOnShow)="onShowCourse(course)">
+        <!-- generate trash and edit buttons if editable is true -->
+        <ng-container *ngIf="editable">
+            <app-button iconName="trash" (click)="onDeleteCourse(course)"></app-button>
+            <app-button iconName="edit" (click)="onEditCourse(course)"></app-button>
+        </ng-container>
+    </app-course-card>
+</section>

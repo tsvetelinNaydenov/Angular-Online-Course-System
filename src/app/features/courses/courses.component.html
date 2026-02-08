@@ -1,0 +1,9 @@
+<!-- Course List component-->
+<app-courses-list 
+    [courses]="sampleCourse" 
+    [editable]="true"
+    (showCourse)="showCourseHandler($event)"
+    (editCourse)="editCourseHandler($event)"
+    (deleteCourse)="deleteCourseHandler($event)">
+</app-courses-list>
+

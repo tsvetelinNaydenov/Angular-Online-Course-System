@@ -1,6 +1,4 @@
-$color-white: #fff;
-$color-gray: #CFCFCF;
-$color-red: #FF0000;
+@import "src/app/shared/styles/variables/colors";
 
 .app-plate {
     width: 100%;
@@ -45,5 +43,5 @@ $color-red: #FF0000;
 }
 
 .text-danger {
-    color: red;
+    color: $color-red;
 }

@@ -31,4 +31,11 @@
       margin-top: 16px;
     }
   }
+  &__info-actions {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+  }
 }

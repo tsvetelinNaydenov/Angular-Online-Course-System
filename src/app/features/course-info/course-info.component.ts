@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Course } from '@app/shared/models/course.interface';
 
 @Component({
   selector: 'app-course-info',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./course-info.component.scss']
 })
 export class CourseInfoComponent {
-  // Use the names for the input `course`.
+  @Input() course!: Course;
 }

@@ -1,4 +1,5 @@
-@import "src/app/shared/styles/variables/colors";
+@import "src/app/shared/styles/variables/fonts";
+@import "src/app/shared/styles/variables/mixins";
 
 .app-header {
     display: flex;
@@ -8,4 +9,10 @@
     padding: 0 30px;
     background-color: $color-white;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
