@@ -2,17 +2,13 @@
 @import "src/app/shared/styles/variables/mixins";
 
 .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-    padding: 0 30px;
+    @include flex($justify: space-between, $align: center);
+    padding: 20px 30px;
     background-color: $color-white;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 .right {
-    display: flex;
-    align-items: center;
+    @include flex($align: center);
     gap: 8px;
 }

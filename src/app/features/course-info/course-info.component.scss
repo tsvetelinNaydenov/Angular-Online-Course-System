@@ -1,16 +1,15 @@
 @import "src/app/shared/styles/variables/colors";
+@import "src/app/shared/styles/variables/mixins";
 
 .title {
-  font-size: 32px;
-  font-weight: 900;
+  @include font($size: 32px, $weight: 900);
 }
 
 .course-info {
   padding: 32px;
   box-shadow: 0 0 4px rgb(0 0 0 / 25%);
   border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
+  @include flex($justify: space-between);
   margin: 32px 0;
   min-height: 170px;
   width: 80vw;
@@ -24,15 +23,12 @@
 
   &__info {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    @include flex($direction: column, $justify: space-between);
     gap: 3px;
     margin-left: 50px;
   }
 }
 
 .navigation-block{
-  display: flex;
-  justify-content: flex-end;
+  @include flex($justify: flex-end);
 }
