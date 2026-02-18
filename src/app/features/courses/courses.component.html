@@ -1,3 +1,8 @@
+<!-- Search component-->
+ <app-search
+    placeholder="Search courses..."
+    (search)="searchCoursesHandler($event)"></app-search>
+
 <!-- Course List component-->
 <app-courses-list 
     [courses]="sampleCourse" 

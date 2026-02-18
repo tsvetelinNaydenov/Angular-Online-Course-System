@@ -1,12 +1,11 @@
 @import 'src/app/shared/styles/styles';
+@import "src/app/shared/styles/variables/mixins";
 
 .course {
  min-width: 60vw;
 
   &__flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    @include flex($justify: space-between, $align: baseline);
 
     & input {
       flex: 1;
@@ -23,7 +22,9 @@
 
   &__authors {
     margin-top: 8px;
-    display: flex;
+    @include flex($direction: column);
+    gap: 8px;
+    
 
     &-item {
       margin-right: 10px;
@@ -34,4 +35,30 @@
     margin-left: 4px;
     cursor: pointer;
   }
+}
+.form__action {
+  @include flex($justify: space-between);
+}
+
+.course__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.course__authors-item {
+  @include flex($align: center);
+  gap: 16px;
+}
+
+.course__authors ::ng-deep .app-button {
+  background-color: white;
+}
+
+.course__authors ::ng-deep .btn-icon {
+  color: rgb(74, 74, 74);
+}
+
+.course__authors-wrapper {
+  @include flex($justify: space-between, $align: flex-start);
+  gap: 40px;
 }

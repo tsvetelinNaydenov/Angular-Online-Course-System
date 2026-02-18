@@ -1,4 +1,4 @@
-<button class="app-button" [class.app-button__single-icon]="iconName && !buttonText">
+<button class="app-button" [attr.type]="type" [class.app-button__single-icon]="iconName && !buttonText">
     <!-- using font awesome component for setting up either trash or edit icon if iconName exists-->
     <fa-icon *ngIf="iconName" [icon]="['fas', iconName]" class="btn-icon"></fa-icon>
 

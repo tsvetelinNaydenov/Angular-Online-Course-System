@@ -1,9 +1,17 @@
+@import 'src/app/shared/styles/variables/mixins';
+
 .app-search {
   display: flex;
   width: 100%;
   align-items: baseline;
+  margin-top: 16px;
 
   & input {
     margin-right: 24px;
   }
+}
+
+.search-form {
+  @include flex($justify: space-between);
+  width: 100%
 }

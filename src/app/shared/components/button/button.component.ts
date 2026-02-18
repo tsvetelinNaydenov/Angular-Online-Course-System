@@ -15,4 +15,5 @@ export class ButtonComponent {
 
   @Input() buttonText?: string;
   @Input() iconName?: IconName;
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
 }

@@ -17,6 +17,9 @@ export class CoursesComponent {
   deleteCourseHandler(course: Course){
     console.log(`Delete course for: ${course.title}`);
   }
+  searchCoursesHandler(course: any){
+    console.log(`Search text is ${course}`);
+  }
 
   //creating mock data for testing purposes
   sampleCourse: Course[] = [{

@@ -1,9 +1,12 @@
 @import 'src/app/shared/styles/styles';
+@import 'src/app/shared/styles/variables/mixins';
 
 .registration-form {
-  width: 260px;
+  max-width: 260px;
+  padding: 16px;
   margin-top: 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  @include flex($direction: column, $justify: space-between);
+}
+.form__action {
+  @include flex($justify: center);
 }
