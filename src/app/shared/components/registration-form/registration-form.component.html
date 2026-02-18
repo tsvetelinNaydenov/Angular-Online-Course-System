@@ -7,10 +7,10 @@
           <label for="name">Name</label>
           <input type="text" id="name" placeholder="Input text" formControlName="name" />
           <div *ngIf="name.invalid && (name.touched || submitted)">
-            <span class="text-danger" *ngIf="name.hasError('required')">
+            <span id="nameErrorMessage" class="text-danger" *ngIf="name.hasError('required')">
               Name is required.
             </span>
-            <span class="text-danger" *ngIf="name.hasError('minlength') && !name.hasError('required')">
+            <span id="nameErrorMessage" class="text-danger" *ngIf="name.hasError('minlength') && !name.hasError('required')">
               Name must be at least 6 characters.
             </span>
           </div>
@@ -20,10 +20,10 @@
           <label for="email">Email</label>
           <input type="text" id="email" placeholder="Input text" formControlName="email" emailValidator />
           <div *ngIf="email.invalid && (email.touched || submitted)">
-            <span class="text-danger" *ngIf="email.hasError('required')">
+            <span id="emailErrorMessage" class="text-danger" *ngIf="email.hasError('required')">
               Email is required.
             </span>
-            <span class="text-danger" *ngIf="email.hasError('emailInvalid') && !email.hasError('required')">
+            <span id="emailErrorMessage" class="text-danger" *ngIf="email.hasError('emailInvalid') && !email.hasError('required')">
               Invalid email format.
             </span>
           </div>
@@ -33,7 +33,7 @@
           <label for="password">Password</label>
           <input type="password" id="password" placeholder="Input text" formControlName="password" />
           <div *ngIf="password.invalid && (password.touched || submitted)">
-            <span class="text-danger" *ngIf="password.hasError('required') && (password.touched || submitted)">
+            <span id="passwordErrorMessage" class="text-danger" *ngIf="password.hasError('required') && (password.touched || submitted)">
               Password is required.
             </span>
           </div>
