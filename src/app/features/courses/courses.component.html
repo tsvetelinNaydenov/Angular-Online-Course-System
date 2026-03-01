@@ -1,14 +1,21 @@
+<div
+    *ngIf="((userStore.isAdmin$ | async) ?? false) && !isSearching && (((coursesWithAuthors$ | async) ?? []).length === 0)">
+    <h1>Your List is Empty</h1>
+    <p>Please use 'Add New Course' button to add your first course</p>
+    <app-button buttonText="Add New Course" (click)="addNewCourseHandler()">
+    </app-button>
+</div>
 <!-- Search component-->
- <app-search
-    placeholder="Search courses..."
-    (search)="searchCoursesHandler($event)"></app-search>
+<div class="search">
+    <app-search placeholder="Search courses..." (search)="searchCoursesHandler($event)"></app-search>
+    <div *ngIf="isSearching &&((coursesWithAuthors$ | async)?.length === 0)">
+        No courses found
+    </div>
+    <app-button buttonText="Add New Course" (click)="addNewCourseHandler()"></app-button>
+</div>
 
 <!-- Course List component-->
-<app-courses-list 
-    [courses]="sampleCourse" 
-    [editable]="true"
-    (showCourse)="showCourseHandler($event)"
-    (editCourse)="editCourseHandler($event)"
+<app-courses-list [courses]="filteredCourses ?? ((coursesWithAuthors$ | async) ?? [])" [editable]="(userStore.isAdmin$ | async) ?? false"
+    (showCourse)="showCourseHandler($event)" (editCourse)="editCourseHandler($event)"
     (deleteCourse)="deleteCourseHandler($event)">
 </app-courses-list>
-

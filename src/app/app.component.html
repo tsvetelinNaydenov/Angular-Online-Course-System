@@ -1,47 +1,50 @@
 <!-- Header component -->
 <app-header>
-  <span>{{ username }}</span> 
-  <app-button [buttonText]="loginBtnText"></app-button>
+  <span>{{ username$ | async}}</span>
+  <app-button 
+  [buttonText]="(loginBtnText$ | async) || ''" 
+  (click)="onAuthButtonClick()"></app-button>
 </app-header>
 
 <div class="app-root">
-
-  <app-login-form></app-login-form>
+  <router-outlet></router-outlet>
+</div>
+<!--
+    <app-login-form></app-login-form>
   <app-registration-form></app-registration-form>
   <app-course-form></app-course-form>
   <app-courses></app-courses>
 
-  <!-- Buttons component-->
-  <!--<app-button buttonText="Show More"></app-button>
+  Buttons component
+<app-button buttonText="Show More"></app-button>
   <app-button iconName="edit"></app-button>
   <app-button iconName="trash"></app-button> -->
 
-  <!-- Info component -->
- <!-- 
+<!-- Info component -->
+<!-- 
   <app-info title="your list is empty" text="Please use 'Add New Course' button to add your first course">
     <app-button buttonText="Add New Course"></app-button>
   </app-info>
 
   <app-courses></app-courses>
   -->
-  
-  <!-- create sample course-info for testing purposes -->
- <!-- 
+
+<!-- create sample course-info for testing purposes -->
+<!-- 
   <app-course-info [course]="sampleCourse"></app-course-info>
 -->
 
-  <!-- Search component -->
-  <!--<app-search></app-search>-->
+<!-- Search component -->
+<!--<app-search></app-search>-->
 
-  <!-- Login Form component -->
-  <!--<app-login-form></app-login-form>-->
+<!-- Login Form component -->
+<!--<app-login-form></app-login-form>-->
 
-  <!-- Login Form component -->
-  <!--<app-registration-form></app-registration-form>-->
+<!-- Login Form component -->
+<!--<app-registration-form></app-registration-form>-->
 
-  <!-- Login Form component -->
-  <!--<app-course-form></app-course-form>-->
+<!-- Login Form component -->
+<!--<app-course-form></app-course-form>-->
 
-  <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
-</div>
+<!-- Modal component -->
+<!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->

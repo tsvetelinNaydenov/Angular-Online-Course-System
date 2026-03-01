@@ -1,23 +1,36 @@
-import { Component } from '@angular/core';
-import { Course } from './shared/models/course.interface';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { map } from 'rxjs';
+import { AuthService } from '@app/auth/services/auth.service';
+import { UserStoreService } from '@app/user/services/user-store.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'courses-app';
-  username = 'Harry Potter'; //placehoder for testing purposes
-  loginBtnText = 'Logout'; //placeholder for testing purposes
+  constructor(
+    private userStore: UserStoreService, 
+    private authService: AuthService,
+  private router: Router) { }
 
-  // sample course for testing course-info component
-  sampleCourse: Course = {
-    id: '12345',
-    title: 'Angular Fundamentals',
-    description: "Angular is the best front-end framework!",
-    creationDate: new Date,
-    duration: 200,
-    authors: ['Tsvetelin Naydenov', 'Rustam Levkovsky']
+  username$ = this.userStore.name$;
+
+  loginBtnText$ = this.authService.isAuthorized$.pipe(
+    map(isAuthorized => isAuthorized ? 'Logout' : 'Login')
+  );
+
+  ngOnInit(): void {
+    this.userStore.getUser();
+  }
+
+  onAuthButtonClick(): void {
+    if (this.authService.isAuthorised) {
+      this.authService.logout();
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

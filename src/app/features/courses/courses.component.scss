@@ -1,0 +1,5 @@
+@import "src/app/shared/styles/variables/mixins";
+
+.search {
+    @include flex($justify: space-between, $align: center);
+}

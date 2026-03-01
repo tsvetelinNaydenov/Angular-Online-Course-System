@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -7,31 +7,41 @@ import {
 } from '@angular/forms';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesStoreService } from '@app/services/courses-store.service';
+import { Author, Course } from '@app/services/course.models';
+import { UserStoreService } from '@app/user/services/user-store.service';
+import { map, Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-export class CourseFormComponent {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+export class CourseFormComponent implements OnInit {
+  constructor(public fb: FormBuilder,
+    public library: FaIconLibrary,
+    private coursesStore: CoursesStoreService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private userStore: UserStoreService) {
     library.addIconPacks(fas);
   }
+
+  isEditMode = false;
+  courseId = '';
+  avaliableAuthors$ = this.coursesStore.authors$;
+
   courseForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(2)]),
     description: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    duration: new FormControl(null, [Validators.required, Validators.min(0)]),
+    duration: new FormControl(0, [Validators.required, Validators.min(0)]),
     newAuthor: new FormControl('', [Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/)]),
     authors: new FormArray([], [this.minAuthorsValidator.bind(this)]) // attaching validation function
   }, {
     updateOn: 'blur'
   });
-
-  // factory function to check if there is at least one author added to course 
-  minAuthorsValidator(control: AbstractControl) {
-    const formArray = control as FormArray; // casting AbstractControl to FormArray
-    return formArray.controls.length > 0 ? null : { noAuthors: true };
-  }
 
   // getters to make it simpler in the template
   get title() { return this.courseForm.get('title')!; }
@@ -42,59 +52,116 @@ export class CourseFormComponent {
 
   submitted = false;
 
-  // mock data for authors for testing purposes
-  mockedAuthorsList = [
-    {
-        id: '27cc3006-e93a-4748-8ca8-73d06aa93b6d',
-        name: 'Vasiliy Dobkin'
-    },
-    {
-        id: 'f762978b-61eb-4096-812b-ebde22838167',
-        name: 'Nicolas Kim'
-    },
-    {
-        id: 'df32994e-b23d-497c-9e4d-84e4dc02882f',
-        name: 'Anna Sidorenko'
-    },
-    {
-        id: '095a1817-d45b-4ed7-9cf7-b2417bcbf748',
-        name: 'Valentina Larina'
-    },
-];
+  ngOnInit(): void {
+    this.userStore.getUser();
+    this.coursesStore.getAll();
+    this.route.params.subscribe(params => {
+      const courseId = params['id'];
+    });
+    this.coursesStore.getAllAuthors();
 
-  onSubmit(){
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+
+      if (id) {
+        this.isEditMode = true;
+        this.courseId = id;
+
+        this.coursesStore.courses$
+          .subscribe(courses => {
+            const course = courses[0];
+            if (course) {
+              this.populateForm(course);
+            }
+          });
+      }
+    });
+  }
+
+  private populateForm(course: Course): void {
+  this.courseForm.patchValue({
+    title: course.title,
+    description: course.description,
+    duration: course.duration
+  });
+
+  // clear existing authors
+  this.authors.clear();
+
+  // add author IDs to FormArray
+  course.authors.forEach(authorId => {
+    this.authors.push(new FormControl(authorId));
+  });
+}
+
+  getCourseById(id: string): Observable<Course | undefined> {
+    return this.coursesStore.courses$.pipe(
+      map(courses => courses.find(course => course.id === id))
+    );
+  }
+
+  // factory function to check if there is at least one author added to course 
+  minAuthorsValidator(control: AbstractControl) {
+    const formArray = control as FormArray; // casting AbstractControl to FormArray
+    return formArray.controls.length > 0 ? null : { noAuthors: true };
+  }
+
+  onSubmit() {
+    if (this.courseForm.invalid) {
+      return;
+    }
+    const formValue = this.courseForm.value;
+
+    const course: Course = {
+      id: this.isEditMode ? this.courseId : crypto.randomUUID(),
+      title: formValue.title!,
+      description: formValue.description!,
+      duration: formValue.duration!,
+      creationDate: new Date().toISOString(),
+      authors: formValue.authors as string[]
+    };
+
+    if (this.isEditMode) {
+      this.coursesStore.editCourse(this.courseId, course);
+    } else {
+      this.coursesStore.createCourse(course);
+    }
+
     this.submitted = true;
+
+    this.router.navigate(['/courses']);
   }
 
-  onAddAuthor(author: any){
-    this.authors.push(new FormControl(author)); // push new form control with added author's id into the form groups's authors form array
-    this.mockedAuthorsList = this.mockedAuthorsList.filter(el => el.id !== author.id); // remove the author from the mock data
+  onAddAuthor(author: Author) {
+    const alreadyAdded = this.authors.value.includes(author.id);
+    if (alreadyAdded) return;
+
+    this.authors.push(new FormControl(author.id));
   }
 
-  onCourseAuthorDelete(author: any, index: number) {
-    this.authors.removeAt(index); // removes author from course authors with the provided index
-    this.mockedAuthorsList.push(author);
+  onCourseAuthorDelete(index: number) {
+    this.authors.removeAt(index);
   }
 
-  onCreateNewAuthor(){
-    const authorName = this.newAuthor.value;
-    if(this.newAuthor.invalid || !authorName){
+  onCreateNewAuthor() {
+    if (this.newAuthor.invalid || !this.newAuthor.value) {
       return;
     }
 
-    const newAuthorObj = {
-      id: crypto.randomUUID(),
-      name: authorName
-    }
+    this.coursesStore.createAuthor(this.newAuthor.value);
 
-    this.mockedAuthorsList.push(newAuthorObj);
     this.newAuthor.reset();
-    console.log(newAuthorObj);
   }
 
-  onAuthorListDelete(author: {id: string, name: string}){
-    this.mockedAuthorsList = this.mockedAuthorsList.filter(
-      el => el.id !== author.id
-    );
+  onAuthorListDelete(author: Author) {
+    //this.coursesStore.deleteAuthor(author.id);
+  }
+
+  onCancel() {
+    this.router.navigate(["/courses"]);
+  }
+
+  getAuthorName(authorId: string, authors: Author[]): string {
+    return authors.find(a => a.id === authorId)?.name || '';
   }
 }

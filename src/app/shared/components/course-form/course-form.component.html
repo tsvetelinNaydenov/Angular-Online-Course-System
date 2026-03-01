@@ -29,7 +29,8 @@
           <div class="form__control">
             <div class="course__flex">
               <input type="text" id="author" placeholder="Input Author Name" formControlName="newAuthor" />
-              <app-button id="createAuthor" buttonText="Create Author" (click)="onCreateNewAuthor()" type="button"></app-button>
+              <app-button id="createAuthor" buttonText="Create Author" (click)="onCreateNewAuthor()"
+                type="button"></app-button>
             </div>
             <div *ngIf="newAuthor.touched || submitted">
               <span class="text-danger" *ngIf="newAuthor.hasError('pattern')">
@@ -41,7 +42,7 @@
             </div>
             <div class="course__authors">
               <!-- rendering availble authors from the mocked data-->
-              <div class="course__authors-item" *ngFor="let author of mockedAuthorsList">
+              <div class="course__authors-item" *ngFor="let author of (avaliableAuthors$ | async)">
                 {{ author.name }}
 
                 <div class="course__actions">
@@ -60,9 +61,11 @@
           </span>
           <div class="course__authors">
             <div class="course__authors-item" *ngFor="let control of authors.controls let i = index">
-              <span>{{ control.value.name }}</span>
+              <ng-container *ngIf="(avaliableAuthors$ | async) as authorsList">
+                <span>{{ getAuthorName(control.value, authorsList) }}</span>
+              </ng-container>
               <div class="course__actions">
-                <app-button iconName="trash" (click)="onCourseAuthorDelete(control.value, i)"></app-button>
+                <app-button iconName="trash" (click)="onCourseAuthorDelete(i)"></app-button>
               </div>
             </div>
           </div>
@@ -86,8 +89,8 @@
         </div>
       </div>
       <div class="form__action">
-        <app-button buttonText="Create Course" type="submit"></app-button>
-        <app-button buttonText="Cancel"></app-button>
+        <app-button [buttonText]="isEditMode ? 'Edit Course' : 'Create Course'" type="submit"></app-button>
+        <app-button buttonText="Cancel" (click)="onCancel"></app-button>
       </div>
     </div>
   </div>
