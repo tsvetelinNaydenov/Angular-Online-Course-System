@@ -16,12 +16,12 @@ export const routes: Routes = [
         canActivate: [NotAuthorizedGuard]
     },
     {
-        path: "courses", canMatch: [AuthorizedGuard],
+        path: "courses", canActivate: [AuthorizedGuard],
         loadChildren: () =>
             import("./features/courses/courses.module").then(m => m.CoursesModule)
     },
-    { path: "", redirectTo: "/login", pathMatch: "full" },
-    { path: "**", redirectTo: "/courses" },
+    { path: "", redirectTo: "courses", pathMatch: "full" },
+    { path: "**", redirectTo: "courses" },
 ];
 
 @NgModule({

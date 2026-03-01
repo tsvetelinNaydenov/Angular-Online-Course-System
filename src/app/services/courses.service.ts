@@ -58,7 +58,7 @@ export class CoursesService {
 
     createAuthor(name: string): Observable<SuccessfulRequest<Author | string> | FailedRequest> {
         const newAuthor: Author = {
-            id: crypto.randomUUID(),
+            id: Math.random().toString(36).substring(2),
             name: name
         };
 
