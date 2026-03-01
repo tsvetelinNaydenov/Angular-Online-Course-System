@@ -30,9 +30,6 @@ import { TokenInterceptor } from './auth/interceptors/token.interceptor';
     NotAuthorizedGuard,
     CoursesService,
     CoursesStoreService,
-    {provide: 'Window',
-      useValue: window
-    },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
