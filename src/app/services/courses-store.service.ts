@@ -142,7 +142,6 @@ export class CoursesStoreService {
                     ]);
                 }
             })
-            console.log('Updated authors:', this.authors$$.value);
     }
 
     getAuthorById(id: string) {

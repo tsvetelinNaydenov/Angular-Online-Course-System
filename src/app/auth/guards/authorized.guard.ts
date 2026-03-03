@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { UrlTree, Router, Route, UrlSegment, CanActivate } from '@angular/router';
+import { UrlTree, Router, Route, UrlSegment, CanLoad } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthorizedGuard implements CanActivate {
+export class AuthorizedGuard implements CanLoad {
     constructor(
         private authService: AuthService,
         private router: Router
     ) { }
 
-    canActivate(): boolean | UrlTree {
+    canLoad(
+        route: Route,
+        segmets: UrlSegment[]
+    ): boolean | UrlTree {
 
         if (this.authService.isAuthorised) {
             return true;

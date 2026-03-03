@@ -57,13 +57,8 @@ export class CoursesService {
     }
 
     createAuthor(name: string): Observable<SuccessfulRequest<Author | string> | FailedRequest> {
-        const newAuthor: Author = {
-            id: Math.random().toString(36).substring(2),
-            name: name
-        };
-
         return this.http.post<SuccessfulRequest<string | Author> | FailedRequest>(
-            `${this.BASE_URL}/authors/add`, newAuthor
+            `${this.BASE_URL}/authors/add`, {id: "", name: name}
         );
     }
 

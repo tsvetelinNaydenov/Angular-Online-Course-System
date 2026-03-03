@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './auth/interceptors/token.interceptor';
+import { WINDOW } from './auth/services/window.token';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { TokenInterceptor } from './auth/interceptors/token.interceptor';
     NotAuthorizedGuard,
     CoursesService,
     CoursesStoreService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: WINDOW, useValue: window}
   ],
   bootstrap: [AppComponent],
 })

@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class NotAuthorizedGuard implements CanActivate {
+export class NotAuthorizedGuard implements CanLoad {
     constructor(
         private authService: AuthService,
         private router: Router
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+    canLoad(
+        route: Route, 
+        segmets: UrlSegment[]
+    ): boolean | UrlTree {
         if(!this.authService.isAuthorised){
             return true;
         }
-        console.log('NotAuthorizedGuard triggered');
+        
         return this.router.createUrlTree(['/courses']);
     }
 }

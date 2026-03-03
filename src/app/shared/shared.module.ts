@@ -9,8 +9,8 @@ import {
   SearchComponent,
   CourseCardComponent,
   CourseFormComponent,
-  LoginFormComponent,
-  RegistrationFormComponent
+  RegistrationFormComponent,
+  LoginFormComponent
 } from "./components";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { DurationPipe } from './pipes/duration.pipe';
@@ -29,12 +29,12 @@ const components = [
   DurationPipe,
   CustomDatePipe,
   EmailValidatorDirective,
-  LoginFormComponent,
-  RegistrationFormComponent
+  RegistrationFormComponent,
+  LoginFormComponent
 ];
 
 @NgModule({
-  declarations: [components],
+  declarations: components,
   imports: [
     CommonModule,
     FontAwesomeModule,

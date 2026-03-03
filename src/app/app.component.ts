@@ -28,7 +28,15 @@ export class AppComponent implements OnInit {
 
   onAuthButtonClick(): void {
     if (this.authService.isAuthorised) {
-      this.authService.logout();
+      this.authService.logout().subscribe({
+        next: () => {
+          this.userStore.clearUser();
+          this.router.navigate(['/login']);
+        },
+        error: err => {
+          console.error('Logout failed', err);
+        }
+      });
     } else {
       this.router.navigate(['/login']);
     }

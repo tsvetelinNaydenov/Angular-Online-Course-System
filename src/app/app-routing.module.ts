@@ -6,17 +6,18 @@ import { NotAuthorizedGuard } from "./auth/guards/not-authorized.guard";
 
 export const routes: Routes = [
     {
-        path: "login",
-        component: LoginFormComponent,
-        canActivate: [NotAuthorizedGuard]
+        path: "login", canLoad: [NotAuthorizedGuard],
+        loadChildren: () =>
+            import("./shared/components/login-form/login.module").then(m => m.LoginModule)
+        
     },
     {
-        path: 'registration',
-        component: RegistrationFormComponent,
-        canActivate: [NotAuthorizedGuard]
+        path: 'registration', canLoad: [NotAuthorizedGuard],
+        loadChildren: () =>
+            import("./shared/components/registration-form/registration.module").then(m => m.RegistrationModule)
     },
     {
-        path: "courses", canActivate: [AuthorizedGuard],
+        path: "courses", canLoad: [AuthorizedGuard],
         loadChildren: () =>
             import("./features/courses/courses.module").then(m => m.CoursesModule)
     },
