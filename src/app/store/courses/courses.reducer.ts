@@ -81,7 +81,8 @@ export const coursesReducer = createReducer(
 
     on(CoursesActions.requestDeleteCourse, (state) => ({
         ...state,
-        isAllCoursesLoading: true
+        isAllCoursesLoading: true,
+        errorMessage: ''
     })),
 
     on(CoursesActions.requestDeleteCourseSuccess, (state, { id }) => ({
@@ -98,7 +99,8 @@ export const coursesReducer = createReducer(
 
     on(CoursesActions.requestEditCourse, (state) => ({
         ...state,
-        isSingleCourseLoading: true
+        isSingleCourseLoading: true,
+        errorMessage: ''
     })),
 
     on(CoursesActions.requestEditCourseSuccess, (state, { course }) => ({
@@ -116,6 +118,7 @@ export const coursesReducer = createReducer(
     on(CoursesActions.requestCreateCourse, (state) => ({
         ...state,
         isAllCoursesLoading: true,
+        errorMessage: ''
     })),
 
     on(CoursesActions.requestCreateCourseSuccess, (state, { course }) => ({
