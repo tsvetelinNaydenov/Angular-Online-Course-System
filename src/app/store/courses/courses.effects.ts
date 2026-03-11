@@ -50,7 +50,7 @@ export class CoursesEffects {
         ofType(CoursesActions.requestDeleteCourse),
         mergeMap(({ id }) => this.coursesService.deleteCourse(id)
             .pipe(
-                map(() => CoursesActions.requestAllCourses()),
+                map(() => CoursesActions.requestDeleteCourseSuccess({ id })),
                 catchError(error => of(CoursesActions.requestDeleteCourseFail({ error })))
             ))
     ));
