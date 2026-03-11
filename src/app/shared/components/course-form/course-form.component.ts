@@ -12,6 +12,7 @@ import { CoursesStoreService } from '@app/services/courses-store.service';
 import { Author, Course } from '@app/services/course.models';
 import { UserStoreService } from '@app/user/services/user-store.service';
 import { map, Observable } from 'rxjs';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
 
 
 @Component({
@@ -20,12 +21,14 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  constructor(public fb: FormBuilder,
+  constructor(
     public library: FaIconLibrary,
-    private coursesStore: CoursesStoreService,
+    private coursesStore: CoursesStoreService, // for using authors$
+    private coursesFacade: CoursesStateFacade,
     private route: ActivatedRoute,
     private router: Router,
-    private userStore: UserStoreService) {
+    private userStore: UserStoreService
+  ) {
     library.addIconPacks(fas);
   }
 
@@ -54,10 +57,8 @@ export class CourseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.userStore.getUser();
-    this.coursesStore.getAll();
-    this.route.params.subscribe(params => {
-      const courseId = params['id'];
-    });
+    this.coursesFacade.getAllCourses();
+    
     this.coursesStore.getAllAuthors();
 
     this.route.params.subscribe(params => {
@@ -67,7 +68,7 @@ export class CourseFormComponent implements OnInit {
         this.isEditMode = true;
         this.courseId = id;
 
-        this.coursesStore.courses$
+        this.coursesFacade.courses$
           .subscribe(courses => {
             const course = courses[0];
             if (course) {
@@ -79,23 +80,23 @@ export class CourseFormComponent implements OnInit {
   }
 
   private populateForm(course: Course): void {
-  this.courseForm.patchValue({
-    title: course.title,
-    description: course.description,
-    duration: course.duration
-  });
+    this.courseForm.patchValue({
+      title: course.title,
+      description: course.description,
+      duration: course.duration
+    });
 
-  // clear existing authors
-  this.authors.clear();
+    // clear existing authors
+    this.authors.clear();
 
-  // add author IDs to FormArray
-  course.authors.forEach(authorId => {
-    this.authors.push(new FormControl(authorId));
-  });
-}
+    // add author IDs to FormArray
+    course.authors.forEach(authorId => {
+      this.authors.push(new FormControl(authorId));
+    });
+  }
 
   getCourseById(id: string): Observable<Course | undefined> {
-    return this.coursesStore.courses$.pipe(
+    return this.coursesFacade.courses$.pipe(
       map(courses => courses.find(course => course.id === id))
     );
   }
@@ -122,9 +123,9 @@ export class CourseFormComponent implements OnInit {
     };
 
     if (this.isEditMode) {
-      this.coursesStore.editCourse(this.courseId, course);
+      this.coursesFacade.editCourse(course, this.courseId);
     } else {
-      this.coursesStore.createCourse(course);
+      this.coursesFacade.createCourse(course);
     }
 
     this.submitted = true;

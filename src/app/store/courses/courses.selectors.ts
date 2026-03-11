@@ -1,23 +1,49 @@
-// @ts-nocheck
 // Add your code here
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { coursesFeatureKey, CoursesState } from './courses.reducer';
 
 // Select the courses feature state
-export let selectCoursesState;
+export const selectCoursesState = createFeatureSelector<CoursesState>(coursesFeatureKey);
 
 // Selectors for loading states
-export let isAllCoursesLoadingSelector;
+export const isAllCoursesLoadingSelector = createSelector(
+    selectCoursesState,
+    (state) => state.isAllCoursesLoading
+);
 
-export let isSearchingStateSelector;
+export const isSearchingStateSelector = createSelector(
+    selectCoursesState,
+    (state) => state.isSearchState
+);
 
-export let isSingleCourseLoadingSelector;
+export const isSingleCourseLoadingSelector = createSelector(
+    selectCoursesState,
+    (state) => state.isSingleCourseLoading
+);
 
 // Selector for getting all courses
-export let getAllCourses;
+export const getAllCourses = createSelector(
+    selectCoursesState,
+    (state) => state.allCourses
+);
 
 // Selector for getting a specific course
-export let getCourse;
+export const getCourse = createSelector(
+    selectCoursesState,
+    (state) => state.course
+);
 
 // Selector for getting the error message
-export let getErrorMessage;
+export const getErrorMessage = createSelector(
+    selectCoursesState,
+    (state) => state.errorMessage
+);
+
+export const coursesQuery = {
+    isAllCoursesLoadingSelector,
+    isSearchingStateSelector,
+    isSingleCourseLoadingSelector,
+    getAllCourses,
+    getCourse,
+    getErrorMessage
+}

@@ -1,45 +1,45 @@
-// @ts-nocheck
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { coursesQuery } from './courses.selectors';
+import * as CoursesActions from '../courses/courses.actions';
+import { Course } from '@app/services/course.models';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CoursesStateFacade {
-    isAllCoursesLoading$: Observable<boolean>;
-    isSingleCourseLoading$: Observable<boolean>;
-    isSearchingState$: Observable<boolean>;
-    courses$: Observable<any[]>;
-    allCourses$: Observable<any[]>;
-    course$: Observable<any>;
-    errorMessage$: Observable<string>;
+    isAllCoursesLoading$ = this.store.select(coursesQuery.isAllCoursesLoadingSelector);
+    isSingleCourseLoading$ = this.store.select(coursesQuery.isSingleCourseLoadingSelector);
+    isSearchingState$ = this.store.select(coursesQuery.isSearchingStateSelector);
+    courses$ = this.store.select(coursesQuery.getAllCourses)
+    allCourses$ = this.store.select(coursesQuery.getAllCourses);
+    course$ = this.store.select(coursesQuery.getCourse);
+    errorMessage$ = this.store.select(coursesQuery.getErrorMessage);
 
 
-    constructor() {
-        // Add your code here
-    }
+    constructor(private store: Store) { }
 
     getAllCourses(): void {
-        // Add your code here
+        this.store.dispatch(CoursesActions.requestAllCourses());
     }
 
     getSingleCourse(id: string): void {
-        // Add your code here
+        this.store.dispatch(CoursesActions.requestSingleCourse({ id }))
     }
 
     getFilteredCourses(searchValue: string): void {
-        // Add your code here
+        this.store.dispatch(CoursesActions.requestFilteredCourses({ title: searchValue }));
     }
 
-    editCourse(body: any, id: string): void {
-        // Add your code here
+    editCourse(body: Course, id: string): void {
+        this.store.dispatch(CoursesActions.requestEditCourse({ id, course: body }));
     }
 
-    createCourse(body: any): void {
-        // Add your code here
+    createCourse(body: Course): void {
+        this.store.dispatch(CoursesActions.requestCreateCourse({ course: body }));
     }
 
     deleteCourse(id: string): void {
-        // Add your code here
+        this.store.dispatch(CoursesActions.requestDeleteCourse({ id }));
     }
 }
